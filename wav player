@@ -1,0 +1,70 @@
+#include<iostream>
+#include<windows.h>    //used for PlaySound function
+#include<fstream>    //used for file handling
+#include <list>
+#include <algorithm>
+
+#define MAX 100
+using namespace std;
+
+list<string> my_audio_list;
+list<string>::iterator it;
+void add_list()
+{
+	int choice = 1;
+	while(choice)
+	{
+		string audio;
+		cin >> audio; // accept audio
+		my_audio_list.push_back(audio);
+		cout << "want to add song\n"
+			<< "press one else 0::  ";
+			cin >> choice;
+	}
+}
+void show_list()
+{
+	cout << "your music list is::\n";
+	for ( it = my_audio_list.begin() ; it!=my_audio_list.end(); ++it)
+	{
+		cout << "\t" << *it <<endl;
+	}
+}
+
+string play_wav()
+{
+	string audiofile;
+	audiofile = my_audio_list.front();
+	my_audio_list.pop_front();
+	return audiofile;
+}
+int main()
+{
+  char audiofile_char[50];
+  string audiofile_str;
+  char audio[100];
+  fstream fp;
+  
+  //Enter name of a 'wav' audio file with .wav extension and make sure it is present in the folder where your program is saved.
+	cout << "enter number of song to be added::  ";
+	add_list();
+	show_list();
+	audiofile_str = play_wav();
+  fp.open(audiofile_str.c_str(), ios::in);
+    if (fp != NULL)
+    {	cout << "audio playing : \n" ;
+  		PlaySound(audiofile_str.c_str(), NULL, SND_SYNC);
+  	}
+  else
+  	{
+    cout<<"\nAudio file couldn't run..!!";
+    cout<<"\nCheck the following things: \n "
+	<<"1. Your file is an original .wav audio file. \n "
+	<<"2. You have mentioned '.wav' extension in the name of file. "
+	<<"\n 3. It is present in the folder where your program is saved.";
+  	}  
+  
+  fp.close();
+  
+  return 0;
+}
